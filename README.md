@@ -10,5 +10,5 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-##Architecture Consideration
+## Architecture Consideration
 Application was built so that users can modify and edit equipment from the get go. Modification is done via a modal popup where users can set geometry and color value
