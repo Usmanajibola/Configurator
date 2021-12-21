@@ -19,6 +19,7 @@ export class ConfigureEquipmentComponent implements OnInit, AfterViewInit {
   private material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({map: this.loader.load("/assets/img/artificial_img.jpeg")});
   private renderer: THREE.WebGLRenderer
   private controls:OrbitControls ;
+  
   //private gui = new dat.GUI();
   
   private cube: THREE.Mesh = new THREE.Mesh(this.geometry, this.material)
