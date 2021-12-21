@@ -1,4 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ConfigService } from 'src/app/services/config.service';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -14,7 +16,7 @@ export class ConfigureEquipmentComponent implements OnInit, AfterViewInit {
 
   private camera: THREE.PerspectiveCamera
   private loader = new THREE.TextureLoader()
-  private geometry:THREE.BoxGeometry = new THREE.BoxGeometry(3,3,3)
+  private geometry:any = new  THREE.SphereGeometry( 4, 14, 16 );
   private scene: THREE.Scene
   private material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({map: this.loader.load("/assets/img/artificial_img.jpeg")});
   private renderer: THREE.WebGLRenderer
@@ -30,14 +32,29 @@ export class ConfigureEquipmentComponent implements OnInit, AfterViewInit {
     return this.canvasRef.nativeElement
   }
   
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private configService: ConfigService
+  ) { }
 
   ngOnInit(): void {
+    
   }
 
   ngAfterViewInit() : void {
     this.createScene();
-    this.renderCube()
+    this.renderCube();
+    this.loadAndSetData(this.route.snapshot.params['id'])
+  }
+
+  private loadAndSetData(id:any) {
+    this.configService.getItem(String(id))
+    .subscribe(
+      data => {
+        console.log(data)
+        this.setGeometry(data["attributes"]["geometry"])
+      }
+    )
   }
 
   private createScene() {
@@ -82,6 +99,25 @@ export class ConfigureEquipmentComponent implements OnInit, AfterViewInit {
       component.animateCube();
       component.renderer.render(component.scene, component.camera)
     }())
+  }
+
+  setGeometry(data:string) {
+    switch(data) {
+      case 'sphere':
+        this.geometry = new THREE.SphereGeometry(40)
+        this.createScene()
+        this.renderCube()
+        break;
+      case 'cube':
+        this.geometry = new THREE.BoxGeometry(3,3,3)
+        this.renderCube()
+        this.renderCube()
+        break;
+
+      default:
+        break;
+
+    }
   }
 
 }
